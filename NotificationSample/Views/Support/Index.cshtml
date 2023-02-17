@@ -1,0 +1,69 @@
+﻿@model NotificationSample.Models.SupportRequest
+@using NotificationSample.Models
+@using Microsoft.AspNetCore.SignalR
+@{
+    ViewData["Title"] = "Index";
+
+}
+
+@foreach (var product in Model)
+{
+    <div>
+        <h2>@product.Name</h2>
+        <p>@product.Price</p>
+    </div>
+}
+
+
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+<h1>Submit Support Request</h1>
+@section scripts {
+    <script>
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")
+            .build();
+
+        connection.start().then(function () {
+            connection.on("NewSupportRequest", function () {
+                var notificationIcon = document.getElementById("notification-icon");
+                if (notificationIcon) {
+                    connection.invoke("GetSupportRequestCount").then(function (count) {
+                        notificationIcon.textContent = count;
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+     
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>fdjf</td>
+      <td>mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>dfd</td>
+      <td>Thornton</td>
+      <td>fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</
